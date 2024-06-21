@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ConstantValue {
   static double size = 16;
 
-  List<Color> colors = [
+  static List<Color> colors = [
     const Color(0xFF448AFF),
     const Color(0xFF9575CD),
     const Color(0xFFFF8A80),

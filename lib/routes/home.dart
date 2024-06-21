@@ -1,6 +1,7 @@
 import 'package:expense_tracker_app/models/const.dart';
 import 'package:expense_tracker_app/widgets/app_header.dart';
 import 'package:expense_tracker_app/widgets/bottom_nav.dart';
+import 'package:expense_tracker_app/widgets/home_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,15 +20,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black87,
         body: SafeArea(
           child: Container(
             padding: EdgeInsets.symmetric(
               vertical: ConstantValue.size / 2,
-              horizontal: ConstantValue.size / 2,
+              horizontal: ConstantValue.size * 1.5,
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppHeader(moneyFormat: moneyFormat),
+                SizedBox(height: ConstantValue.size),
+                HomeChart(),
               ],
             ),
           ),
