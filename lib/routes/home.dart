@@ -1,7 +1,8 @@
 import 'package:expense_tracker_app/models/const.dart';
-import 'package:expense_tracker_app/providers/bottom_provider.dart';
+import 'package:expense_tracker_app/widgets/app_header.dart';
+import 'package:expense_tracker_app/widgets/bottom_nav.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,12 +14,24 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectIndex = 0;
 
+  final moneyFormat = NumberFormat("#,##0.00", "en_US");
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
-        body: Container(),
+        body: SafeArea(
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: ConstantValue.size / 2,
+              horizontal: ConstantValue.size / 2,
+            ),
+            child: Column(
+              children: [
+                AppHeader(moneyFormat: moneyFormat),
+              ],
+            ),
+          ),
+        ),
         extendBody: true,
         floatingActionButton: FloatingActionButton(
           backgroundColor: ConstantValue.primaryColor,
@@ -40,85 +53,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class BottomNav extends StatefulWidget {
-  final List<IconData> icons;
-
-  const BottomNav({
-    super.key,
-    required this.icons,
-  });
-
-  @override
-  State<BottomNav> createState() => _BottomNavState();
-}
-
-class _BottomNavState extends State<BottomNav> {
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<BottomProvider>(
-      builder: (context, value, child) {
-        return Stack(
-          children: [
-            Opacity(
-              opacity: 0.1,
-              child: Container(
-                height: 60,
-                margin: EdgeInsets.only(
-                  left: ConstantValue.size,
-                  bottom: ConstantValue.size,
-                  right: ConstantValue.size,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color.fromRGBO(158, 158, 158, 1),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(ConstantValue.size),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                ),
-              ),
-            ),
-            Container(
-              height: 60,
-              margin: EdgeInsets.only(
-                left: ConstantValue.size,
-                bottom: ConstantValue.size,
-                right: ConstantValue.size,
-              ),
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(ConstantValue.size),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: ConstantValue.size),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(
-                  widget.icons.length,
-                  (index) => GestureDetector(
-                    onTap: () {
-                      if (index != 2) value.changeIndex(index);
-                    },
-                    child: Icon(
-                      widget.icons[index],
-                      color: index != 2
-                          ? index == value.index
-                              ? ConstantValue.primaryColor
-                              : Colors.white
-                          : Colors.transparent,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }
