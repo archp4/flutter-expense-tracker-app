@@ -1,5 +1,7 @@
 import 'package:expense_tracker_app/models/const.dart';
+import 'package:expense_tracker_app/providers/bottom_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +21,8 @@ class _HomePageState extends State<HomePage> {
         body: Container(),
         extendBody: true,
         floatingActionButton: FloatingActionButton(
+          backgroundColor: ConstantValue.primaryColor,
+          foregroundColor: Colors.black,
           onPressed: () {},
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
@@ -26,11 +30,13 @@ class _HomePageState extends State<HomePage> {
           child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: BottomNav(
-          onTap: (index) {},
-          index: 0,
+        bottomNavigationBar: const BottomNav(
           icons: [
-            Icons.abc,
+            Icons.dashboard,
+            Icons.business_center,
+            Icons.telegram,
+            Icons.list,
+            Icons.settings,
           ],
         ),
       ),
@@ -39,14 +45,10 @@ class _HomePageState extends State<HomePage> {
 }
 
 class BottomNav extends StatefulWidget {
-  final Function(int) onTap;
-  final int index;
   final List<IconData> icons;
 
   const BottomNav({
     super.key,
-    required this.onTap,
-    required this.index,
     required this.icons,
   });
 
@@ -57,52 +59,66 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Opacity(
-          opacity: 0.1,
-          child: Container(
-            height: 60,
-            margin: EdgeInsets.only(
-              left: ConstantValue.size,
-              bottom: ConstantValue.size,
-              right: ConstantValue.size,
+    return Consumer<BottomProvider>(
+      builder: (context, value, child) {
+        return Stack(
+          children: [
+            Opacity(
+              opacity: 0.1,
+              child: Container(
+                height: 60,
+                margin: EdgeInsets.only(
+                  left: ConstantValue.size,
+                  bottom: ConstantValue.size,
+                  right: ConstantValue.size,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(158, 158, 158, 1),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(ConstantValue.size),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ),
+              ),
             ),
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(158, 158, 158, 1),
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(ConstantValue.size),
+            Container(
+              height: 60,
+              margin: EdgeInsets.only(
+                left: ConstantValue.size,
+                bottom: ConstantValue.size,
+                right: ConstantValue.size,
+              ),
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(ConstantValue.size),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: ConstantValue.size),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(
+                  widget.icons.length,
+                  (index) => GestureDetector(
+                    onTap: () {
+                      if (index != 2) value.changeIndex(index);
+                    },
+                    child: Icon(
+                      widget.icons[index],
+                      color: index != 2
+                          ? index == value.index
+                              ? ConstantValue.primaryColor
+                              : Colors.white
+                          : Colors.transparent,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            ),
-          ),
-        ),
-        Container(
-          height: 60,
-          margin: EdgeInsets.only(
-            left: ConstantValue.size,
-            bottom: ConstantValue.size,
-            right: ConstantValue.size,
-          ),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(ConstantValue.size),
-          ),
-          padding: EdgeInsets.symmetric(horizontal: ConstantValue.size),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ListView.builder(
-                itemCount: widget.icons.length,
-                itemBuilder: (_, index) => Icon(widget.icons[index]),
-              )
-            ],
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }

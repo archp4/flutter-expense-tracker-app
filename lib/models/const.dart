@@ -11,4 +11,6 @@ class ConstantValue {
     const Color(0xFF8BC34A),
     const Color(0xFFF06292),
   ];
+
+  static Color primaryColor = const Color(0xffe3de7c);
 }
